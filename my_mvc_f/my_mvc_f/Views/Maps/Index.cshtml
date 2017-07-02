@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewBag.Title = "Maps";
+}
+<link rel="stylesheet" href="https://js.arcgis.com/4.3/esri/css/main.css">
+<script src="https://js.arcgis.com/4.3/"></script>
+<style>
+    #result {
+        position: absolute;
+        z-index: 99;
+        top: 15px;
+        float: right;
+        right: 10px;
+        border-radius: 6px;
+        text-align: center;
+        background-color: rgba(198, 226, 36, 0.3);
+    }
+    #viewDiv {
+
+        position:relative;
+        left:0;
+        margin:0 auto;
+        height: 620px;
+        width: 98%;
+        border-radius:2px;
+        animation-duration:initial;
+    }
+
+    .search {
+        position:absolute;
+        top: 12px;
+        border-radius: 3px;
+        width:200px;
+        margin: auto 60px auto;
+        background-color: rgba(230, 36, 62, 0.4);
+    }
+
+    #ok {
+        position: relative;
+        left: 60px;
+    }
+</style>
+<script>
+        require([
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/symbols/SimpleMarkerSymbol",
+      "esri/Graphic",
+      "esri/geometry/Point",
+      "dojo/domReady!"
+    ], function(Map, MapView,SimpleMarkerSymbol,
+      Graphic,
+      Point) {
+
+      var map = new Map({
+        basemap: "streets"
+      });
+
+      var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        zoom: 4,
+        center: [15, 65]
+      });
+            function addPoint(x,y){
+        let  point = new Point({
+        longitude:x,
+        latitude: y
+      }),
+      markerSymbol = new SimpleMarkerSymbol({
+        color: [parseInt(Math.random()*255),parseInt(Math.random()*255),parseInt(Math.random()*255)],
+        outline: { // autocasts as new SimpleLineSymbol()
+          color: [255, 255, 255],
+          width: 2
+        }
+      }),
+              // Create a graphic and add the geometry and symbol to it
+      pointGraphic = new Graphic({
+        geometry: point,
+        symbol: markerSymbol
+      });
+        view.graphics.addMany([pointGraphic]);
+      }
+        $(function(){
+        $("#ok").click(function(){
+        var qq=document.getElementById("in").value;
+        var ww=document.getElementById("region").value;
+       $.ajax({
+          type:"GET",
+          url:"http://api.map.baidu.com/place/v2/search?q="+ww+"&region="+qq+"&output=json&ak=**",
+          dataType:"jsonp",
+          success:function(data){
+              document.getElementById("result").innerHTML=null;
+            alert(data);
+            console.log(data);
+            var cc="";
+            var head="<table class='table table-striped'><th>名称</th><th>lat</th><th>lng</th>";
+            for(x=0;x<data.results.length;x++){
+                let a=data.results[x].location.lat,b=data.results[x].location.lng;
+                addPoint(b,a);
+                cc+="<tr>"+"<td>"+data.results[x].name+"</td><td>"+data.results[x].location.lat+"</td><td>"+data.results[x].location.lng+"</td>"+"</tr>";
+                    view.popup.open({
+          // Set the popup's title to the coordinates of the location
+          title: "Reverse geocode: [" + b+ ", " + a + "]",
+          location: [b,a] // Set the location of the popup to the clicked location
+        });
+        }
+            document.getElementById("result").innerHTML=head+cc+"</table>";
+          },
+          error:function(){
+              alert("error!");
+           console.log("error");
+          }
+        });
+      });
+        });
+    });
+</script>
+
+    <div id="viewDiv">
+        <div class="search">
+            <input id="in" class="form-control" placeholder="搜索城市" type="text">
+            <input type="text" class="form-control" placeholder="搜索建筑" name="pio" id="region">
+            <button id="ok" class="btn btn-success" style="margin:0 auto">Search</button>
+        </div>
+        <div id="result">
+        </div>
+    </div>
+
+
+

@@ -1,0 +1,26 @@
+﻿
+<!--声明-->
+@model my_mvc_f.Models.Character
+<!--定義-->
+@{
+    ViewBag.Title = "Links";
+}
+<!--使用Razor-->
+<h2>@ViewBag.Title</h2>
+<ul>
+    <li><a href="http://www.baidu.com">Baidu</a></li>
+    <li><a href="http://www.yahoo.com">Yahoo</a></li>
+    <li><a href="http://www.google.com">Google</a></li>
+    <li><a href="http://www.google.com">@Model.Name</a></li>
+</ul>
+
+<!--使用razor是在cshtml中使用c#的代码-->
+<!--单一阐述代码块-->
+@{ var total = 7;}
+<!--直接对定义的c#变量进行使用   inline-->
+<p>the value of the total is :@total</p>
+<!--多行代码块-->
+@{ 
+    @*注释代码*@
+    /*注释代码两种方式*/
+}

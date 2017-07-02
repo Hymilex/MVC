@@ -1,0 +1,21 @@
+﻿@model my_mvc_f.Models.Character
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Characters:</h2>
+<form asp-action="Index">
+    <div>
+        <input name="CharacterName" />
+        <input type="submit" value="Add Character" />
+    </div>
+    <div>
+        <ul>
+            <li>
+                <h2>@Model.Name</h2>
+            </li>
+        </ul>
+    </div>
+</form>
+

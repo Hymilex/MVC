@@ -1,0 +1,23 @@
+﻿@model List<my_mvc_f.Models.Character>
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+<form asp-action="Create" >
+    <div>
+        <input name="CharacterName" />
+        <input type="submit" value="Add Character"/>
+    </div>
+    <div>
+        <ul>
+        @foreach (var item in Model)
+        {
+            <li>
+                <label>@item.Name</label>
+            </li>
+        }
+        </ul>
+    </div>
+</form>
+

@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "Jack";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Jack</h2>
+<ul>
+    @*@表示的是开始调用c#语句了*@
+    @for (int i = 0; i < ViewBag.Times; i++)
+    {
+        <li>@ViewBag.Message</li>
+    }
+</ul>
+
